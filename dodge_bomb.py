@@ -1,4 +1,5 @@
 import os
+import random
 import sys
 import pygame as pg
 
@@ -12,6 +13,18 @@ DELTA = {
 }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+def check_bound(obj_rct:pg.Rect) -> tuple[bool,bool]:
+        """
+        引数：こうかとんRectかばくだんRect
+        戻り値：タプル（横方向判定結果，縦方向判定結果）
+        画面内ならTrue，画面外ならFalse
+        """
+        yoko,tate = True,True
+        if obj_rct.left < 0 or WIDTH < obj_rct.right:
+            yoko = False
+        if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
+            tate = False
+        return yoko, tate
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -22,11 +35,24 @@ def main():
     kk_rct.center = 300, 200
     clock = pg.time.Clock()
     tmr = 0
+    bb_img = pg.Surface((20, 20))
+    pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)
+    bb_rct = bb_img.get_rect()
+    bb_rct.center = random.randint(0, WIDTH),random.randint(0,WIDTH)
+    bb_img.set_colorkey((0, 0, 0))
+    vx,vy = +5,+5
+
+    
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
         screen.blit(bg_img, [0, 0]) 
+
+        if kk_rct.colliderect(bb_rct):
+            print("Game Over")
+            return
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -44,10 +70,20 @@ def main():
         #if key_lst[pg.K_RIGHT]:
         #    sum_mv[0] += 5
         kk_rct.move_ip(sum_mv)
+        if check_bound(kk_rct) != (True,True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
+        bb_rct.move_ip(vx, vy)
+        yoko,tate = check_bound(bb_rct)
+        if not yoko:
+            vx *= -1
+        if not tate:
+            vy *= -1
+        screen.blit(bb_img, bb_rct)
         pg.display.update()
         tmr += 1
         clock.tick(50)
+
 
 
 if __name__ == "__main__":
