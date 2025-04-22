@@ -51,9 +51,6 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
         bb_imgs.append(bb_img)
     return bb_imgs,bb_accs
 
-
-
-
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -104,9 +101,10 @@ def main():
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx, vy)
         # 最大でlevel = 9まで
-        bb_img = bb_imgs[min(tmr // 500, 9)]
-        acc = bb_accs[min(tmr // 500, 9)]
-        bb_rct.move_ip(vx * acc, vy * acc)
+        avx = vx*bb_accs[min(tmr // 500, 9)]
+        avy = vy*bb_accs[min(tmr // 500, 9)]
+        bb_img = bb_imgs[min(tmr//500, 9)]
+        bb_rct.move_ip(avx, avy)
         yoko,tate = check_bound(bb_rct)
         if not yoko:
             vx *= -1
