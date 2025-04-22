@@ -41,6 +41,16 @@ def gameover(screen: pg.Surface) -> None:
     pg.display.update()
     time.sleep(5)
 
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    bb_imgs = []
+    bb_accs = [a for a in range(1, 11)]
+    for r in range(1, 11):
+        bb_img = pg.Surface((20*r, 20*r))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bb_img.set_colorkey((0, 0, 0))  # 黒背景を透過
+        bb_imgs.append(bb_img)
+    return bb_imgs,bb_accs
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -56,8 +66,9 @@ def main():
     bb_rct.center = random.randint(0, WIDTH),random.randint(0,WIDTH)
     bb_img.set_colorkey((0, 0, 0))
     vx,vy = +5,+5
+    bb_imgs, bb_accs = init_bb_imgs()  # 爆弾の画像と加速段階の初期化
 
-    
+
 
     while True:
         for event in pg.event.get():
@@ -89,6 +100,10 @@ def main():
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx, vy)
+        level = min(tmr // 500, 9)  # 最大でlevel = 9まで
+        bb_img = bb_imgs[level]
+        acc = bb_accs[level]
+        bb_rct.move_ip(vx * acc, vy * acc)
         yoko,tate = check_bound(bb_rct)
         if not yoko:
             vx *= -1
@@ -98,8 +113,6 @@ def main():
         pg.display.update()
         tmr += 1
         clock.tick(50)
-
-
 
 if __name__ == "__main__":
     pg.init()
