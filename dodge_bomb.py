@@ -51,6 +51,30 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
         bb_imgs.append(bb_img)
     return bb_imgs,bb_accs
 
+def get_kk_img(sum_mv: tuple[int, int]) -> pg.Surface:
+    """
+    こうかとんの移動量に応じた向き画像を返す関数
+
+    引数：
+        sum_mv : 合計移動量タプル (x方向, y方向)
+
+    戻り値：
+        移動方向に対応するこうかとん画像Surface
+    """
+    kk_imgs = {
+        (0, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9),
+        (0, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 90, 0.9),
+        (0, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), -90, 0.9),
+        (-5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 180, 0.9),
+        (+5, 0): pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9),
+        (-5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 135, 0.9),
+        (-5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), -135, 0.9),
+        (+5, -5): pg.transform.rotozoom(pg.image.load("fig/3.png"), 45, 0.9),
+        (+5, +5): pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 0.9),
+    }
+    return kk_imgs.get(sum_mv, kk_imgs[(0, 0)])
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
