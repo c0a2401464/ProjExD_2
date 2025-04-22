@@ -41,7 +41,7 @@ def gameover(screen: pg.Surface) -> None:
     pg.display.update()
     time.sleep(5)
 
-def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]: #爆弾膨張加速関数
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]: #爆弾膨張加速関数 2
     bb_imgs = []
     bb_accs = [a for a in range(1, 11)]
     for r in range(1, 11):
