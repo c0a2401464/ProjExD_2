@@ -16,7 +16,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def check_bound(obj_rct:pg.Rect) -> tuple[bool,bool]:
         """
-        引数：こうかとんRectかばくだんRect
+        引数：こうかとんRect
         戻り値：タプル（横方向判定結果，縦方向判定結果）
         画面内ならTrue，画面外ならFalse
         """
@@ -55,7 +55,7 @@ def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
-    kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
+    kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"),0,0.9)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
     clock = pg.time.Clock()
